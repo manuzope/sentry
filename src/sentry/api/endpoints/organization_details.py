@@ -315,10 +315,11 @@ class OrganizationDetailsEndpoint(OrganizationEndpoint):
 
         :pparam string organization_slug: the slug of the organization the
                                           team should be created for.
+        :param string lite: if this is "1", then do not include projects and teams
         :auth: required
         """
-        is_skinny = request.GET.get('skinny') == '1'
-        serializer = org_serializers.SkinnyDetailedOrganizationSerializer if is_skinny else org_serializers.DetailedOrganizationSerializer
+        is_lite = request.GET.get('lite') == '1'
+        serializer = org_serializers.LiteDetailedOrganizationSerializer if is_lite else org_serializers.DetailedOrganizationSerializer
         context = serialize(
             organization,
             request.user,

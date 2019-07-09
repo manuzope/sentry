@@ -117,9 +117,9 @@ class OnboardingTasksSerializer(Serializer):
 
 
 # Does not include project/teams list
-class SkinnyDetailedOrganizationSerializer(OrganizationSerializer):
+class LiteDetailedOrganizationSerializer(OrganizationSerializer):
     def get_attrs(self, item_list, user, **kwargs):
-        return super(SkinnyDetailedOrganizationSerializer, self).get_attrs(item_list, user)
+        return super(LiteDetailedOrganizationSerializer, self).get_attrs(item_list, user)
 
     def serialize(self, obj, attrs, user, access):
         from sentry import experiments
@@ -132,7 +132,7 @@ class SkinnyDetailedOrganizationSerializer(OrganizationSerializer):
 
         experiment_assignments = experiments.all(org=obj, actor=user)
 
-        context = super(SkinnyDetailedOrganizationSerializer, self).serialize(obj, attrs, user)
+        context = super(LiteDetailedOrganizationSerializer, self).serialize(obj, attrs, user)
         max_rate = quotas.get_maximum_quota(obj)
         context['experiments'] = experiment_assignments
         context['quota'] = {
@@ -183,7 +183,7 @@ class SkinnyDetailedOrganizationSerializer(OrganizationSerializer):
         return context
 
 
-class DetailedOrganizationSerializer(SkinnyDetailedOrganizationSerializer):
+class DetailedOrganizationSerializer(LiteDetailedOrganizationSerializer):
     def get_attrs(self, item_list, user, **kwargs):
         return super(DetailedOrganizationSerializer, self).get_attrs(item_list, user)
 
